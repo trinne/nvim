@@ -13,7 +13,7 @@ return require('packer').startup(function(use)
 		requires = { {'nvim-lua/plenary.nvim'} }
 	}
 
-	use 'AlexvZyl/nordic.nvim'
+	use 'Mofiqul/dracula.nvim'
 	use('nvim-treesitter/nvim-treesitter', {run = ':TSUpdate'})
 	use('mbbill/undotree')
 	use('tpope/vim-fugitive')
