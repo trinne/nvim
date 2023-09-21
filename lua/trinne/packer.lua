@@ -32,6 +32,9 @@ return require('packer').startup(function(use)
 			{'L3MON4D3/LuaSnip'},     -- Required
 		}
 	}
-    use{'folke/trouble.nvim', requires = { {'nvim-tree/nvim-web-devicons'} }}
+    use {
+        'folke/trouble.nvim',
+        requires = { {'nvim-tree/nvim-web-devicons'} }
+    }
 end)
 
