@@ -17,6 +17,7 @@ return require('packer').startup(function(use)
 	use('nvim-treesitter/nvim-treesitter', {run = ':TSUpdate'})
 	use('mbbill/undotree')
 	use('tpope/vim-fugitive')
+    use('lewis6991/gitsigns.nvim')
 	use {
 		'VonHeikemen/lsp-zero.nvim',
 		branch = 'v2.x',
@@ -36,5 +37,8 @@ return require('packer').startup(function(use)
         'folke/trouble.nvim',
         requires = { {'nvim-tree/nvim-web-devicons'} }
     }
+    use 'mfussenegger/nvim-dap'
+    use 'mfussenegger/nvim-jdtls'
+    use 'nvim-tree/nvim-tree.lua'
 end)
 
