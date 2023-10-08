@@ -48,6 +48,9 @@ return require('packer').startup(function(use)
             {'onsails/lspkind.nvim'} -- Optional symbols in completions
 		}
 	}
+    -- Code structure 
+    use 'simrat39/symbols-outline.nvim'
+
     -- Debugging
     use 'mfussenegger/nvim-dap'
     use {
