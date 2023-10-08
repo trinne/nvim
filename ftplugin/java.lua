@@ -60,10 +60,16 @@ local bundles = {
 
 vim.list_extend(bundles, vim.split(vim.fn.glob(home .. "/java-debug/vscode-java-test/server/*.jar", 1), "\n"))
 
+-- The nvim-cmp supports additional LSP's capabilities so we need to
+-- advertise it to LSP servers..
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+
 local config = {
   flags = {
     debounce_text_changes = 80,
   },
+  capabilities = capabilities,
   on_attach = on_attach,  -- We pass our on_attach keybindings to the configuration map
   init_options = {
     bundles = bundles
