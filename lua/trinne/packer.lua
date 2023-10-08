@@ -48,6 +48,13 @@ return require('packer').startup(function(use)
     -- Debugging
     use 'mfussenegger/nvim-dap'
     use {
+        "rcarriga/nvim-dap-ui",
+        requires = {
+            "mfussenegger/nvim-dap",
+            'folke/neodev.nvim'
+        }
+    }
+    use {
         'nvim-telescope/telescope-dap.nvim',
         requires = {
             {'mfussenegger/nvim-dap'},
@@ -55,7 +62,6 @@ return require('packer').startup(function(use)
             {'nvim-treesitter/nvim-treesitter'}
         }
     }
-
 
     -- Java language server tools
     use 'mfussenegger/nvim-jdtls'
