@@ -47,6 +47,15 @@ return require('packer').startup(function(use)
 	}
     -- Debugging
     use 'mfussenegger/nvim-dap'
+    use {
+        'nvim-telescope/telescope-dap.nvim',
+        requires = {
+            {'mfussenegger/nvim-dap'},
+            {'nvim-telescope/telescope.nvim'},
+            {'nvim-treesitter/nvim-treesitter'}
+        }
+    }
+
 
     -- Java language server tools
     use 'mfussenegger/nvim-jdtls'
@@ -60,17 +69,18 @@ return require('packer').startup(function(use)
 
     -- Test
     use 'vim-test/vim-test'
---    use {
---        'nvim-neotest/neotest',
---        requires = {
---            'nvim-lua/plenary.nvim',
---            'nvim-treesitter/nvim-treesitter',
---            'antoinemadec/FixCursorHold.nvim',
---            'nvim-neotest/neotest-plenary',
---            'nvim-neotest/neotest-vim-test',
---            'vim-test/vim-test'
---        },
---    }
+    use {
+        'nvim-neotest/neotest',
+        requires = {
+            'nvim-lua/plenary.nvim',
+            'nvim-treesitter/nvim-treesitter',
+            'antoinemadec/FixCursorHold.nvim',
+            'nvim-neotest/neotest-plenary',
+            'nvim-neotest/neotest-vim-test',
+            'andy-bell101/neotest-java',
+            'vim-test/vim-test'
+        },
+    }
 
     -- Theme
     use 'Mofiqul/dracula.nvim'

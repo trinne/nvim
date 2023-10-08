@@ -1,5 +1,6 @@
 local home = os.getenv('HOME')
 local jdtls = require('jdtls')
+local JDTLS_VERSION = '1.28.0'
 
 -- File types that signify a Java project's root directory. This will be
 -- used by eclipse to determine what constitutes a workspace
@@ -13,9 +14,9 @@ local root_dir = require('jdtls.setup').find_root(root_markers)
 local workspace_folder = home .. "/.local/share/eclipse/" .. vim.fn.fnamemodify(root_dir, ":p:h:t")
 
 -- Helper function for creating keymaps
-function nnoremap(rhs, lhs, bufopts, desc)
+local function nnoremap(lhs, rhs, bufopts, desc)
   bufopts.desc = desc
-  vim.keymap.set("n", rhs, lhs, bufopts)
+  vim.keymap.set("n", lhs, rhs, bufopts)
 end
 
 -- The on_attach function is used to set key maps after the language server
@@ -28,31 +29,45 @@ local on_attach = function(client, bufnr)
   nnoremap('gi', vim.lsp.buf.implementation, bufopts, "Go to implementation")
   nnoremap('K', vim.lsp.buf.hover, bufopts, "Hover text")
   nnoremap('<C-k>', vim.lsp.buf.signature_help, bufopts, "Show signature")
-  nnoremap('<space>wa', vim.lsp.buf.add_workspace_folder, bufopts, "Add workspace folder")
-  nnoremap('<space>wr', vim.lsp.buf.remove_workspace_folder, bufopts, "Remove workspace folder")
-  nnoremap('<space>wl', function()
+  nnoremap('<leader>wa', vim.lsp.buf.add_workspace_folder, bufopts, "Add workspace folder")
+  nnoremap('<leader>wr', vim.lsp.buf.remove_workspace_folder, bufopts, "Remove workspace folder")
+  nnoremap('<leader>wl', function()
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   end, bufopts, "List workspace folders")
-  nnoremap('<space>D', vim.lsp.buf.type_definition, bufopts, "Go to type definition")
-  nnoremap('<space>rn', vim.lsp.buf.rename, bufopts, "Rename")
-  nnoremap('<space>ca', vim.lsp.buf.code_action, bufopts, "Code actions")
-  vim.keymap.set('v', "<space>ca", "<ESC><CMD>lua vim.lsp.buf.range_code_action()<CR>",
+  nnoremap('<leader>D', vim.lsp.buf.type_definition, bufopts, "Go to type definition")
+  nnoremap('<leader>rn', vim.lsp.buf.rename, bufopts, "Rename")
+  nnoremap('<leader>ca', vim.lsp.buf.code_action, bufopts, "Code actions")
+  vim.keymap.set('v', "<leader>ca", "<ESC><CMD>lua vim.lsp.buf.range_code_action()<CR>",
     { noremap=true, silent=true, buffer=bufnr, desc = "Code actions" })
-  --nnoremap('<space>f', function() vim.lsp.buf.format { async = true } end, bufopts, "Format file")
+  --nnoremap('<leader>f', function() vim.lsp.buf.format { async = true } end, bufopts, "Format file")
 
   -- Java extensions provided by jdtls
-  nnoremap("<C-o>", jdtls.organize_imports, bufopts, "Organize imports")
-  nnoremap("<space>ev", jdtls.extract_variable, bufopts, "Extract variable")
-  nnoremap("<space>ec", jdtls.extract_constant, bufopts, "Extract constant")
-  vim.keymap.set('v', "<space>em", [[<ESC><CMD>lua require('jdtls').extract_method(true)<CR>]],
+  nnoremap("<leader>o", jdtls.organize_imports, bufopts, "Organize imports")
+  nnoremap("<leader>ev", jdtls.extract_variable, bufopts, "Extract variable")
+  nnoremap("<leader>ec", jdtls.extract_constant, bufopts, "Extract constant")
+  vim.keymap.set('v', "<leader>em", [[<ESC><CMD>lua require('jdtls').extract_method(true)<CR>]],
     { noremap=true, silent=true, buffer=bufnr, desc = "Extract method" })
+
+  nnoremap("<leader>vc", jdtls.test_class, bufopts, "Test class (DAP)")
+  nnoremap("<leader>vm", jdtls.test_nearest_method, bufopts, "Test method (DAP)")
+
+  jdtls.setup_dap({ hotcodereplace = 'auto' })
 end
+
+local bundles = {
+  vim.fn.glob(home .. '/java-debug/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar'),
+}
+
+vim.list_extend(bundles, vim.split(vim.fn.glob(home .. "/java-debug/vscode-java-test/server/*.jar", 1), "\n"))
 
 local config = {
   flags = {
     debounce_text_changes = 80,
   },
   on_attach = on_attach,  -- We pass our on_attach keybindings to the configuration map
+  init_options = {
+    bundles = bundles
+  },
   root_dir = root_dir, -- Set the root directory to our found root_marker
   -- Here you can configure eclipse.jdt.ls specific settings
   -- These are defined by the eclipse.jdt.ls project and will be passed to eclipse when starting.
@@ -65,8 +80,8 @@ local config = {
           -- Use Google Java style guidelines for formatting
           -- To use, make sure to download the file from https://github.com/google/styleguide/blob/gh-pages/eclipse-java-google-style.xml
           -- and place it in the ~/.local/share/eclipse directory
-          url = "/.local/share/eclipse/eclipse-java-google-style.xml",
-          profile = "GoogleStyle",
+--          url = "/.local/share/eclipse/eclipse-java-google-style.xml",
+--          profile = "GoogleStyle",
         },
       },
       signatureHelp = { enabled = true },
@@ -114,8 +129,8 @@ local config = {
       configuration = {
         runtimes = {
           {
-            name = "Java-17",
-            path = home .. "/.jenv/versions/17.0",
+            name = "JavaSE-17",
+            path = home .. "/.jenv/versions/17.0/libexec/openjdk.jdk/Contents/Home",
           },
         }
       }
@@ -142,11 +157,11 @@ local config = {
 
     -- The jar file is located where jdtls was installed. This will need to be updated
     -- to the location where you installed jdtls
-    '-jar', vim.fn.glob('/opt/homebrew/Cellar/jdtls/1.27.1/libexec/plugins/org.eclipse.equinox.launcher_*.jar'),
+    '-jar', vim.fn.glob('/opt/homebrew/Cellar/jdtls/' .. JDTLS_VERSION .. '/libexec/plugins/org.eclipse.equinox.launcher_*.jar'),
 
     -- The configuration for jdtls is also placed where jdtls was installed. This will
     -- need to be updated depending on your environment
-    '-configuration', '/opt/homebrew/Cellar/jdtls/1.27.1/libexec/config_mac',
+    '-configuration', '/opt/homebrew/Cellar/jdtls/' .. JDTLS_VERSION .. '/libexec/config_mac',
 
     -- Use the workspace_folder defined above to store data for this project
     '-data', workspace_folder,
