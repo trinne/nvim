@@ -10,7 +10,7 @@ vim.keymap.set('n', '<leader>fc', builtin.lsp_incoming_calls, {})
 vim.keymap.set('n', '<leader>fo', builtin.lsp_outgoing_calls, {})
 vim.keymap.set('n', '<leader>fi', builtin.lsp_implementations, {})
 vim.keymap.set('n', '<leader>fx', '<cmd>Telescope diagnostics bufnr=0<cr>')
-vim.keymap.set('n', '<leader>en', function()
+vim.keymap.set('n', '<leader>ne', function()
     builtin.find_files({
         cwd = "~/.dotfiles/nvim/.config"})
 end)
@@ -65,3 +65,4 @@ require("telescope").setup {
 require("telescope").load_extension("ui-select")
 require('telescope').load_extension('fzf')
 require('telescope').load_extension('dap')
+require('telescope').load_extension('harpoon')

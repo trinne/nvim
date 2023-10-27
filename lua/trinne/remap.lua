@@ -20,10 +20,17 @@ vim.keymap.set("x", "<leader>p", "\"_dPdNzzzv")
 -- yank to system clipboard (+register) asbojornHaland
 vim.keymap.set("n", "<leader>y", "\"+y")
 vim.keymap.set("v", "<leader>y", "\"+y")
-vim.keymap.set("n", "<leader>Y", "\"+y")
+vim.keymap.set("n", "<leader>Y", "\"+Y")
 
 -- delete into the void register
 vim.keymap.set("n", "<leader>d", "\"_d")
 vim.keymap.set("v", "<leader>d", "\"_d")
 
 vim.keymap.set("n", "Q", "<nop>")
+
+vim.keymap.set("n", "ck", "<cmd>cnext<CR>zz")
+vim.keymap.set("n", "cj", "<cmd>cprev<CR>zz")
+vim.keymap.set("n", "lk", "<cmd>lnext<CR>zz")
+vim.keymap.set("n", "lj", "<cmd>lprev<CR>zz")
+
+vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])

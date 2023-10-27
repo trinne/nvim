@@ -4,6 +4,12 @@ lsp.on_attach(function(client, bufnr)
   -- see :help lsp-zero-keybindings
   -- to learn the available actions
   lsp.default_keymaps({buffer = bufnr})
+
+
+  vim.keymap.set('n','<leader>rn', vim.lsp.buf.rename, { noremap=true, silent=true, buffer=bufnr, desc = "Rename" })
+  vim.keymap.set('n','<leader>ca', vim.lsp.buf.code_action, { noremap=true, silent=true, buffer=bufnr, desc = "Code actions" } )
+  vim.keymap.set('v', "<leader>ca", "<ESC><CMD>lua vim.lsp.buf.range_code_action()<CR>",
+    { noremap=true, silent=true, buffer=bufnr, desc = "Code actions" })
 end)
 
 -- IMPORTANT: make sure to setup neodev BEFORE lspconfig
@@ -22,6 +28,9 @@ local cmp_action = require('lsp-zero').cmp_action()
 -- (Optional) Icons for completions
 local lspkind = require('lspkind')
 
+-- Show error in popup
+vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { noremap = true, silent = true })
+
 cmp.setup({
   sources = {
     { name = 'nvim_lsp' },
@@ -36,7 +45,7 @@ cmp.setup({
   mapping = cmp.mapping.preset.insert({
     -- `Enter` key to confirm completion
     ['<CR>'] = cmp.mapping.confirm({
-        behavior = cmp.ConfirmBehavior.Replace,
+        behavior = cmp.ConfirmBehavior.Insert,
         select = true}),
 
     -- Ctrl+Space to trigger completion menu

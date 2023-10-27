@@ -15,3 +15,7 @@ end
 vim.keymap.set('n', '<leader>dui', function()
     dapui.toggle()
 end)
+
+vim.keymap.set('n', '<leader>dur', function()
+    dapui.open( {reset = true} )
+end)
