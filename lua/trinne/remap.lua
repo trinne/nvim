@@ -1,5 +1,6 @@
 vim.g.mapleader = " "
 vim.keymap.set("n", "<leader>pv", vim.cmd.NvimTreeToggle) -- vim.cmd.Ex
+vim.keymap.set("n", "<leader>pf", vim.cmd.NvimTreeFindFile) -- vim.cmd.Ex
 
 -- move lines when selected in visual mode. Indents if moved into if statements etc
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
