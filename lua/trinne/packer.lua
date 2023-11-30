@@ -56,6 +56,9 @@ return require('packer').startup(function(use)
 	}
     use 'tpope/vim-surround'
 
+    -- Github CoPilot
+    use 'github/copilot.vim'
+
     -- Code structure 
     use 'simrat39/symbols-outline.nvim'
     -- Debugging
