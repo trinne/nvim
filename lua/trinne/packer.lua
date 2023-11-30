@@ -51,7 +51,7 @@ return require('packer').startup(function(use)
             {'onsails/lspkind.nvim'} -- Optional symbols in completions
 		}
 	}
-    use 'm4xshen/autoclose.nvim'
+    use 'tpope/vim-surround'
 
     -- Code structure 
     use 'simrat39/symbols-outline.nvim'
