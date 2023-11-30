@@ -83,6 +83,11 @@ return require('packer').startup(function(use)
     use 'mfussenegger/nvim-jdtls'
     use 'nvim-lua/plenary.nvim'
 
+    -- SQL
+    use 'tpope/vim-dadbod'
+    use 'kristijanhusak/vim-dadbod-ui'
+    use 'kristijanhusak/vim-dadbod-completion'
+
     -- Errors and warnings
     use {
         'folke/trouble.nvim',
