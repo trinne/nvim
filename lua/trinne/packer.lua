@@ -46,9 +46,12 @@ return require('packer').startup(function(use)
 			{'hrsh7th/nvim-cmp'},     -- Required
 			{'hrsh7th/cmp-nvim-lsp'}, -- Required
 			{'L3MON4D3/LuaSnip'},     -- Required
-            {'hrsh7th/cmp-vsnip'},
-            {'hrsh7th/vim-vsnip'},
-            {'onsails/lspkind.nvim'} -- Optional symbols in completions
+                        {'hrsh7th/cmp-vsnip'},
+                        {'hrsh7th/vim-vsnip'},
+                        {'hrsh7th/cmp-buffer'},
+                        {'hrsh7th/cmp-path'},
+                        {'hrsh7th/cmp-cmdline'},
+                        {'onsails/lspkind.nvim'} -- Optional symbols in completions
 		}
 	}
     use 'tpope/vim-surround'
@@ -91,7 +94,6 @@ return require('packer').startup(function(use)
             'rcarriga/nvim-notify' -- Optional
         }
     }
-
 
     -- Test
     use 'vim-test/vim-test'

@@ -5,7 +5,7 @@ lsp.on_attach(function(client, bufnr)
   -- to learn the available actions
   lsp.default_keymaps({buffer = bufnr})
 
-
+  vim.keymap.set('n', 'gr', vim.lsp.buf.references, {noremap=true, silent=true, buffer=bufnr, desc="Go to reference"})
   vim.keymap.set('n','<leader>rn', vim.lsp.buf.rename, { noremap=true, silent=true, buffer=bufnr, desc = "Rename" })
   vim.keymap.set('n','<leader>ca', vim.lsp.buf.code_action, { noremap=true, silent=true, buffer=bufnr, desc = "Code actions" } )
   vim.keymap.set('v', "<leader>ca", "<ESC><CMD>lua vim.lsp.buf.range_code_action()<CR>",
@@ -20,6 +20,11 @@ require("neodev").setup({
 -- (Optional) Configure lua language server for neovim
 require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
 
+require'lspconfig'.eslint.setup{}
+require'lspconfig'.tsserver.setup{}
+require'lspconfig'.helm_ls.setup{}
+require'lspconfig'.bashls.setup{}
+
 lsp.setup()
 
 local cmp = require('cmp')
@@ -32,11 +37,14 @@ local lspkind = require('lspkind')
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { noremap = true, silent = true })
 
 cmp.setup({
-  sources = {
+  sources = cmp.config.sources({
     { name = 'nvim_lsp' },
     { name = 'nvim_lsp_signature_help' },
     { name = 'vsnip' },
-  },
+    { name = 'luasnip' },
+  }, {
+    { name = 'buffer' },
+  }),
   snippet = {
     expand = function(args)
       vim.fn["vsnip#anonymous"](args.body) -- because we are using the vsnip cmp plugin
@@ -84,4 +92,22 @@ cmp.setup({
       end
     })
   }
+})
+
+-- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
+cmp.setup.cmdline({ '/', '?' }, {
+--    mapping = cmp.mapping.preset.cmdline(),
+    sources = {
+        { name = 'buffer' }
+    }
+})
+
+  -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+cmp.setup.cmdline(':', {
+--    mapping = cmp.mapping.preset.cmdline(),
+    sources = cmp.config.sources({
+        { name = 'path' }
+    }, {
+       -- { name = 'cmdline' }
+    })
 })
