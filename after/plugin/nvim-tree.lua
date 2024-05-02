@@ -12,7 +12,7 @@ vim.opt.termguicolors = true
 require("nvim-tree").setup({
   sort_by = "case_sensitive",
   view = {
-    width = 50,
+    width = 100,
   },
   renderer = {
     group_empty = true,

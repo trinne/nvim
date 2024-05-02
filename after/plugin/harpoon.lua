@@ -1,3 +1,9 @@
+require("harpoon").setup({
+    menu = {
+        width = vim.api.nvim_win_get_width(0) - 4,
+    }
+})
+
 local mark, ui = require("harpoon.mark"), require("harpoon.ui")
 
 vim.keymap.set('n', '<leader>hm', mark.add_file, {})

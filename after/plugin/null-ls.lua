@@ -33,3 +33,9 @@ null_ls.setup({
     end
   end,
 })
+
+null_ls.builtins.formatting.prettierd.with({
+    condition = function(utils)
+        return utils.has_file({ ".prettierrc.js" })
+    end
+})

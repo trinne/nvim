@@ -1,5 +1,5 @@
 require("prettier").setup({
-  bin = 'prettier', -- or `'prettierd'` (v0.23.3+)
+  bin = 'prettierd', -- or `'prettier'` (v0.23.3+)
   filetypes = {
     "css",
     "graphql",

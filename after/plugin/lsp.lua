@@ -20,10 +20,61 @@ require("neodev").setup({
 -- (Optional) Configure lua language server for neovim
 require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
 
-require'lspconfig'.eslint.setup{}
-require'lspconfig'.tsserver.setup{}
+require 'lspconfig'.eslint.setup({
+    settings = {
+        packageManager = 'npm'
+    },
+    on_attach = function(client, bufnr)
+        vim.api.nvim_create_autocmd("BufWritePre", {
+            buffer = bufnr,
+            command = "EslintFixAll",
+        })
+    end,
+})
+require('lspconfig').tsserver.setup({
+  on_attach = function(client, bufnr)
+      require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
+  end,
+  single_file = false,
+})
 require'lspconfig'.helm_ls.setup{}
 require'lspconfig'.bashls.setup{}
+-- Sonarlint
+--local sonar_language_server_path = require("mason-registry")
+--                .get_package("sonarlint-language-server")
+--                :get_install_path()
+--local analyzers_path = sonar_language_server_path .. "/extension/analyzers"
+--require('sonarlint').setup({
+--    server = {
+--       cmd = {
+--          sonar_language_server_path .. "/sonarlint-language-server.cmd",
+--          --'sonarlint-language-server',
+--          -- Ensure that sonarlint-language-server uses stdio channel
+--          '-stdio',
+--          '-analyzers',
+--          -- paths to the analyzers you need, using those for python and java in this example
+--          -- vim.fn.expand("$MASON/share/sonarlint-analyzers/sonarpython.jar"),
+--          -- vim.fn.expand("$MASON/share/sonarlint-analyzers/sonarcfamily.jar"),
+--          -- vim.fn.expand("$MASON/share/sonarlint-analyzers/sonarjs.jar"),
+--          -- vim.fn.expand("$MASON/share/sonarlint-analyzers/sonarjava.jar"),
+--          vim.fn.expand(analyzers_path .. "/sonarpython.jar"),
+--          vim.fn.expand(analyzers_path .. "/sonarcfamily.jar"),
+--          vim.fn.expand(analyzers_path .. "/sonarjs.jar"),
+--          vim.fn.expand(analyzers_path .. "/sonarjava.jar"),
+--       },
+--       -- All settings are optional
+--       settings = {
+--          -- The default for sonarlint is {}, this is just an example
+--          sonarlint = {}
+--       }
+--    },
+--    filetypes = {
+--        'typescript',
+--        -- Requires nvim-jdtls, otherwise an error message will be printed
+--        'java',
+--    }
+--})
+
 
 lsp.setup()
 
@@ -67,14 +118,14 @@ cmp.setup({
     ['<C-d>'] = cmp.mapping.scroll_docs(-4),
     ['<C-u>'] = cmp.mapping.scroll_docs(4),
 
-    ['<Tab>'] = cmp.mapping(function(fallback)
+    ['<C-n>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
       else
         fallback()
       end
     end, { 'i', 's' }),
-    ['<S-Tab>'] = cmp.mapping(function(fallback)
+    ['<C-p>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item()
       else

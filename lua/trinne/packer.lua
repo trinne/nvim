@@ -54,7 +54,7 @@ return require('packer').startup(function(use)
                         {'onsails/lspkind.nvim'} -- Optional symbols in completions
 		}
 	}
-    use 'tpope/vim-surround'
+    use 'https://gitlab.com/schrieveslaach/sonarlint.nvim.git'
 
     -- Github CoPilot
     use 'github/copilot.vim'
@@ -93,21 +93,25 @@ return require('packer').startup(function(use)
         'folke/trouble.nvim',
         requires = { {'nvim-tree/nvim-web-devicons'} }
     }
+    -- Projectwide diagnostics
+    use {"artemave/workspace-diagnostics.nvim"}
 
     -- Notifications
-    use {
-        'folke/noice.nvim',
-        requires = {
-            'MunifTanjim/nui.nvim',
-            'rcarriga/nvim-notify' -- Optional
-        }
-    }
+
+    --use {
+    --    'folke/noice.nvim',
+    --    requires = {
+    --        'MunifTanjim/nui.nvim',
+    --        'rcarriga/nvim-notify' -- Optional
+    --    }
+    --}
 
     -- Test
     use 'vim-test/vim-test'
     use {
         'nvim-neotest/neotest',
         requires = {
+            "nvim-neotest/nvim-nio",
             'nvim-lua/plenary.nvim',
             'nvim-treesitter/nvim-treesitter',
             'antoinemadec/FixCursorHold.nvim',
