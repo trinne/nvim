@@ -5,7 +5,7 @@ lsp.on_attach(function(client, bufnr)
   -- to learn the available actions
   lsp.default_keymaps({buffer = bufnr})
 
-  vim.keymap.set('n', 'gr', vim.lsp.buf.references, {noremap=true, silent=true, buffer=bufnr, desc="Go to reference"})
+  -- vim.keymap.set('n', 'gr', vim.lsp.buf.references, {noremap=true, silent=true, buffer=bufnr, desc="Go to reference"})
   vim.keymap.set('n','<leader>rn', vim.lsp.buf.rename, { noremap=true, silent=true, buffer=bufnr, desc = "Rename" })
   vim.keymap.set('n','<leader>ca', vim.lsp.buf.code_action, { noremap=true, silent=true, buffer=bufnr, desc = "Code actions" } )
   vim.keymap.set('v', "<leader>ca", "<ESC><CMD>lua vim.lsp.buf.range_code_action()<CR>",
