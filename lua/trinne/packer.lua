@@ -1,148 +1,141 @@
 -- This file can be loaded by calling `lua require('plugins')` from your init.vim
 
 -- Only required if you have packer configured as `opt`
-vim.cmd [[packadd packer.nvim]]
+vim.cmd([[packadd packer.nvim]])
 
-return require('packer').startup(function(use)
-	-- Packer can manage itself
-	use 'wbthomason/packer.nvim'
+return require("packer").startup(function(use)
+  -- Packer can manage itself
+  use("wbthomason/packer.nvim")
 
-    -- Finding files
-	use {
-		'nvim-telescope/telescope.nvim', tag = '0.1.2',
-		-- or                            , branch = '0.1.x',
-		requires = { {'nvim-lua/plenary.nvim'} }
-	}
-    use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
-    use {'nvim-telescope/telescope-ui-select.nvim' }
+  -- General helpers that many plugins use
+  use("nvim-lua/plenary.nvim")
 
-    -- Harpoon
-    use 'ThePrimeagen/harpoon'
+  -- Finding files
+  use({
+    "nvim-telescope/telescope.nvim",
+    tag = "0.1.2",
+    -- or                            , branch = '0.1.x',
+    requires = { { "nvim-lua/plenary.nvim" } },
+  })
+  use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
+  use({ "nvim-telescope/telescope-ui-select.nvim" })
 
-    -- Filetree
-    use 'nvim-tree/nvim-tree.lua'
+  -- Harpoon
+  use("ThePrimeagen/harpoon")
 
-    -- History
-	use('mbbill/undotree')
+  -- Filetree
+  use("nvim-tree/nvim-tree.lua")
 
-    -- GIT
-	use('tpope/vim-fugitive')
-    use('lewis6991/gitsigns.nvim')
+  -- History
+  use("mbbill/undotree")
 
-    -- Syntax highlight
-    use('nvim-treesitter/nvim-treesitter', {run = ':TSUpdate'})
+  -- GIT
+  use("tpope/vim-fugitive")
+  use("lewis6991/gitsigns.nvim")
 
-    -- Language server
-	use {
-		'VonHeikemen/lsp-zero.nvim',
-		branch = 'v2.x',
-		requires = {
-			-- LSP Support
-			{'neovim/nvim-lspconfig'},             -- Required
-			{'williamboman/mason.nvim'},           -- Optional
-			{'williamboman/mason-lspconfig.nvim'}, -- Optional
+  -- Syntax highlight
+  use("nvim-treesitter/nvim-treesitter", { run = ":TSUpdate" })
 
-			-- Autocompletion
-			{'hrsh7th/nvim-cmp'},     -- Required
-			{'hrsh7th/cmp-nvim-lsp'}, -- Required
-			{'L3MON4D3/LuaSnip'},     -- Required
-                        {'hrsh7th/cmp-vsnip'},
-                        {'hrsh7th/vim-vsnip'},
-                        {'hrsh7th/cmp-buffer'},
-                        {'hrsh7th/cmp-path'},
-                        {'hrsh7th/cmp-cmdline'},
-                        {'onsails/lspkind.nvim'} -- Optional symbols in completions
-		}
-	}
-    use 'https://gitlab.com/schrieveslaach/sonarlint.nvim.git'
+  -- Language server
+  use({
+    "VonHeikemen/lsp-zero.nvim",
+    branch = "v2.x",
+    requires = {
+      -- LSP Support
+      { "neovim/nvim-lspconfig" }, -- Required
+      { "williamboman/mason.nvim" }, -- Optional
+      { "williamboman/mason-lspconfig.nvim" }, -- Optional
 
-    -- Github CoPilot
-    use 'github/copilot.vim'
+      -- Autocompletion
+      { "hrsh7th/nvim-cmp" }, -- Required
+      { "hrsh7th/cmp-nvim-lsp" }, -- Required
+      { "L3MON4D3/LuaSnip" }, -- Required
+      { "hrsh7th/cmp-vsnip" },
+      { "hrsh7th/vim-vsnip" },
+      { "hrsh7th/cmp-buffer" },
+      { "hrsh7th/cmp-path" },
+      { "hrsh7th/cmp-cmdline" },
+      { "onsails/lspkind.nvim" }, -- Optional symbols in completions
+    },
+  })
+  -- Sonarlint
+  use("https://gitlab.com/schrieveslaach/sonarlint.nvim.git")
 
-    -- Code structure 
-    use 'simrat39/symbols-outline.nvim'
-    -- Debugging
-    use 'mfussenegger/nvim-dap'
-    use {
-        "rcarriga/nvim-dap-ui",
-        requires = {
-            "mfussenegger/nvim-dap",
-            'folke/neodev.nvim'
-        }
-    }
-    use {
-        'nvim-telescope/telescope-dap.nvim',
-        requires = {
-            {'mfussenegger/nvim-dap'},
-            {'nvim-telescope/telescope.nvim'},
-            {'nvim-treesitter/nvim-treesitter'}
-        }
-    }
+  -- Github CoPilot
+  use("github/copilot.vim")
 
-    -- Java language server tools
-    use 'mfussenegger/nvim-jdtls'
-    use 'nvim-lua/plenary.nvim'
+  -- Code structure
+  use("simrat39/symbols-outline.nvim")
 
-    -- SQL
-    use 'tpope/vim-dadbod'
-    use 'kristijanhusak/vim-dadbod-ui'
-    use 'kristijanhusak/vim-dadbod-completion'
+  -- Debugging
+  use("mfussenegger/nvim-dap")
+  use({
+    "rcarriga/nvim-dap-ui",
+    requires = {
+      "mfussenegger/nvim-dap",
+      "folke/neodev.nvim",
+    },
+  })
+  use({
+    "nvim-telescope/telescope-dap.nvim",
+    requires = {
+      { "mfussenegger/nvim-dap" },
+      { "nvim-telescope/telescope.nvim" },
+      { "nvim-treesitter/nvim-treesitter" },
+    },
+  })
 
-    -- Errors and warnings
-    use {
-        'folke/trouble.nvim',
-        requires = { {'nvim-tree/nvim-web-devicons'} }
-    }
-    -- Projectwide diagnostics
-    use {"artemave/workspace-diagnostics.nvim"}
+  -- Java language server tools
+  use("mfussenegger/nvim-jdtls")
 
-    -- Notifications
+  -- SQL
+  use("tpope/vim-dadbod")
+  use("kristijanhusak/vim-dadbod-ui")
+  use("kristijanhusak/vim-dadbod-completion")
 
-    --use {
-    --    'folke/noice.nvim',
-    --    requires = {
-    --        'MunifTanjim/nui.nvim',
-    --        'rcarriga/nvim-notify' -- Optional
-    --    }
-    --}
+  -- Errors and warnings
+  use({
+    "folke/trouble.nvim",
+    requires = { { "nvim-tree/nvim-web-devicons" } },
+  })
+  -- Projectwide diagnostics
+  use({ "artemave/workspace-diagnostics.nvim" })
 
-    -- Test
-    use 'vim-test/vim-test'
-    use {
-        'nvim-neotest/neotest',
-        requires = {
-            "nvim-neotest/nvim-nio",
-            'nvim-lua/plenary.nvim',
-            'nvim-treesitter/nvim-treesitter',
-            'antoinemadec/FixCursorHold.nvim',
-            'nvim-neotest/neotest-plenary',
-            'nvim-neotest/neotest-vim-test',
-            'andy-bell101/neotest-java',
-            'marilari88/neotest-vitest',
-            'vim-test/vim-test'
-        },
-    }
+  -- Test
+  use("vim-test/vim-test")
+  use({
+    "nvim-neotest/neotest",
+    requires = {
+      "nvim-neotest/nvim-nio",
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+      "antoinemadec/FixCursorHold.nvim",
+      "nvim-neotest/neotest-plenary",
+      "nvim-neotest/neotest-vim-test",
+      "andy-bell101/neotest-java",
+      "marilari88/neotest-vitest",
+      "vim-test/vim-test",
+    },
+  })
 
-    -- Theme
-    use "folke/tokyonight.nvim"
-    use {
-        'nvim-lualine/lualine.nvim',
-        requires = { 'nvim-tree/nvim-web-devicons', opt = true }
-    }
+  -- Theme
+  use("folke/tokyonight.nvim")
 
-    -- Todo comments
-    use {
-        'folke/todo-comments.nvim',
-        requires = {'nvim-lua/plenary.nvim'}
-    }
+  -- Bottom toolbar
+  use({
+    "nvim-lualine/lualine.nvim",
+    requires = { "nvim-tree/nvim-web-devicons", opt = true },
+  })
 
-    -- Code formatting
-    use {
-        'MunifTanjim/prettier.nvim',
-        requires = {
-            {'neovim/nvim-lspconfig'},
-            {'jose-elias-alvarez/null-ls.nvim'}
-        }
-    }
+  -- Todo comments
+  use({
+    "folke/todo-comments.nvim",
+    requires = { "nvim-lua/plenary.nvim" },
+  })
+
+  -- Code formatting
+  use("stevearc/conform.nvim")
+
+  -- Code linting
+  use("mfussenegger/nvim-lint")
 end)
-
