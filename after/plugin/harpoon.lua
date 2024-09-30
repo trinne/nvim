@@ -1,11 +1,30 @@
-require("harpoon").setup({
+local harpoon = require("harpoon")
+
+harpoon:setup({
     menu = {
         width = vim.api.nvim_win_get_width(0) - 4,
     }
 })
 
-local mark, ui = require("harpoon.mark"), require("harpoon.ui")
+vim.keymap.set('n', '<leader>hm', function() harpoon:list():add() end)
+vim.keymap.set('n', '<leader>hu', function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
 
-vim.keymap.set('n', '<leader>hm', mark.add_file, {})
-vim.keymap.set('n', '<leader>hu', ui.toggle_quick_menu, {})
-vim.keymap.set('n', '<leader>ht', '<cmd>Telescope harpoon marks<cr>')
+local conf = require("telescope.config").values
+local function toggle_telescope(harpoon_files)
+    local file_paths = {}
+    for _, item in ipairs(harpoon_files.items) do
+        table.insert(file_paths, item.value)
+    end
+
+    require("telescope.pickers").new({}, {
+        prompt_title = "Harpoon",
+        finder = require("telescope.finders").new_table({
+            results = file_paths,
+        }),
+        previewer = conf.file_previewer({}),
+        sorter = conf.generic_sorter({}),
+    }):find()
+end
+
+vim.keymap.set("n", "<leader>ht", function() toggle_telescope(harpoon:list()) end,
+    { desc = "Open harpoon window" })
