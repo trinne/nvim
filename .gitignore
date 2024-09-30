@@ -1,3 +1,6 @@
+*/**/.DS_Store
 plugin
 !after/plugin
 db_ui/connections.json
+lazy-lock.json
+startup.log
