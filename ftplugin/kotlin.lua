@@ -10,7 +10,7 @@ end
 -- attaches to the current buffer
 local on_attach = function(client, bufnr)
   -- Regular Neovim LSP client keymappings
-  local bufopts = { noremap=true, silent=true, buffer=bufnr }
+  local bufopts = { noremap = true, silent = true, buffer = bufnr }
   nnoremap('gD', vim.lsp.buf.declaration, bufopts, "Go to declaration")
   nnoremap('gd', vim.lsp.buf.definition, bufopts, "Go to definition")
   nnoremap('gi', vim.lsp.buf.implementation, bufopts, "Go to implementation")
@@ -25,7 +25,7 @@ local on_attach = function(client, bufnr)
   nnoremap('<leader>rn', vim.lsp.buf.rename, bufopts, "Rename")
   nnoremap('<leader>ca', vim.lsp.buf.code_action, bufopts, "Code actions")
   vim.keymap.set('v', "<leader>ca", "<ESC><CMD>lua vim.lsp.buf.range_code_action()<CR>",
-    { noremap=true, silent=true, buffer=bufnr, desc = "Code actions" })
+    { noremap = true, silent = true, buffer = bufnr, desc = "Code actions" })
 end
 
 -- The nvim-cmp supports additional LSP's capabilities so we need to
@@ -38,7 +38,7 @@ local config = {
     debounce_text_changes = 80,
   },
   capabilities = capabilities,
-  on_attach = on_attach,  -- We pass our on_attach keybindings to the configuration map
+  on_attach = on_attach, -- We pass our on_attach keybindings to the configuration map
 }
 
-require'lspconfig'.kotlin_language_server.setup{ config }
+vim.lsp.config.kotlin_language_server.setup { config }
