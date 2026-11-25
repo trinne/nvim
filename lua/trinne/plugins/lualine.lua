@@ -5,7 +5,7 @@ return {
     local lualine = require("lualine")
     lualine.setup {
       options = {
-        theme = 'tokyonight'
+        theme = 'auto', -- follows the active colorscheme (lua/trinne/theme.lua)
       }
     }
   end
