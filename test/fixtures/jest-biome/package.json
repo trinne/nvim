@@ -1,0 +1,11 @@
+{
+  "name": "jest-biome",
+  "private": true,
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.6.9",
+    "jest": "30.5.2"
+  }
+}

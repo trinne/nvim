@@ -1,0 +1,10 @@
+{
+  "name": "eslint-prettier",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "eslint": "10.15.0",
+    "@eslint/js": "10.0.1",
+    "prettier": "3.10.1"
+  }
+}

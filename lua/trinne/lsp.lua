@@ -1,75 +1,48 @@
-local keymap = vim.keymap -- for conciseness
+-- LSP behaviour shared by every server. Neovim's own defaults (:h lsp-defaults) stay active:
+--   grn rename · gra code action · grr references · gri implementation · grt type definition
+--   gO document symbols · K hover · <C-s> signature help (insert) · [d ]d diagnostics
+--   <C-w>d diagnostic under the cursor · visual an / in grow / shrink selection
+-- The mappings below keep the old habits and add pickers on top.
 vim.api.nvim_create_autocmd("LspAttach", {
-  group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+  group = vim.api.nvim_create_augroup("trinne.lsp", { clear = true }),
   callback = function(ev)
-    -- Buffer local mappings.
-
-    -- See `:help vim.lsp.*` for documentation on any of the below functions
-    local opts = { buffer = ev.buf, silent = true }
-
-    -- set keybinds
-
-    opts.desc = "Show LSP references"
-    keymap.set("n", "gR", "<cmd>Telescope lsp_references<CR>", opts) -- show definition, references
-
-    opts.desc = "Go to declaration"
-    keymap.set("n", "gD", vim.lsp.buf.declaration, opts) -- go to declaration
-
-
-    opts.desc = "Show LSP definition"
-    keymap.set("n", "gd", vim.lsp.buf.definition, opts) -- show lsp definition
-
-    opts.desc = "Show LSP implementations"
-
-    keymap.set("n", "gi", "<cmd>Telescope lsp_implementations<CR>", opts) -- show lsp implementations
-
-    opts.desc = "Show LSP type definitions"
-    keymap.set("n", "gt", "<cmd>Telescope lsp_type_definitions<CR>", opts) -- show lsp type definitions
-
-    opts.desc = "See available code actions"
-    keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts) -- see available code actions, in visual mode will apply to selection
-
-    opts.desc = "Smart rename"
-    keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts) -- smart rename
-
-
-    opts.desc = "Show buffer diagnostics"
-    keymap.set("n", "<leader>D", "<cmd>Telescope diagnostics bufnr=0<CR>", opts) -- show  diagnostics for file
-
-    opts.desc = "Show line diagnostics"
-    keymap.set("n", "<leader>d", vim.diagnostic.open_float, opts) -- show diagnostics for line
-
-    opts.desc = "Go to previous diagnostic"
-    keymap.set("n", "[d", function()
-      vim.diagnostic.jump({ count = -1, float = true })
-    end, opts) -- jump to previous diagnostic in buffer
-    --
-    opts.desc = "Go to next diagnostic"
-    keymap.set("n", "]d", function()
-      vim.diagnostic.jump({ count = 1, float = true })
-    end, opts) -- jump to next diagnostic in buffer
-
-    opts.desc = "Show documentation for what is under cursor"
-    keymap.set("n", "K", vim.lsp.buf.hover, opts) -- show documentation for what is under cursor
-
-    opts.desc = "Restart LSP"
-    keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts) -- mapping to restart lsp if necessary
+    local function map(mode, lhs, rhs, desc)
+      vim.keymap.set(mode, lhs, rhs, { buffer = ev.buf, desc = desc })
+    end
+    local P = Snacks.picker
+    map("n", "gd", P.lsp_definitions, "Go to definition")
+    map("n", "gD", P.lsp_declarations, "Go to declaration")
+    map("n", "gi", P.lsp_implementations, "Go to implementation")
+    map("n", "<leader>rn", vim.lsp.buf.rename, "Rename")
+    map({ "n", "x" }, "<leader>ca", vim.lsp.buf.code_action, "Code action")
+    map("n", "<leader>fs", P.lsp_symbols, "Symbols (buffer)")
+    map("n", "<leader>fS", P.lsp_workspace_symbols, "Symbols (workspace)")
+    map("n", "<leader>fc", P.lsp_incoming_calls, "Incoming calls")
+    map("n", "<leader>fo", P.lsp_outgoing_calls, "Outgoing calls")
+    map("n", "<leader>fi", P.lsp_implementations, "Implementations")
+    map("n", "<leader>rs", "<cmd>lsp restart<CR>", "Restart LSP")
+    map("n", "<leader>ch", function()
+      vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = ev.buf }), { bufnr = ev.buf })
+    end, "Toggle inlay hints")
   end,
 })
 
--- vim.lsp.inlay_hint.enable(true)
+-- grr opens the references in a picker instead of the quickfix list
+vim.keymap.set("n", "grr", function()
+  Snacks.picker.lsp_references()
+end, { desc = "References" })
 
 local severity = vim.diagnostic.severity
-
 vim.diagnostic.config({
-
+  severity_sort = true,
+  virtual_text = { spacing = 2, source = "if_many" },
+  float = { source = true },
   signs = {
-
     text = {
-      [severity.ERROR] = " ",
-      [severity.WARN] = " ",
+      [severity.ERROR] = " ",
+      [severity.WARN] = " ",
       [severity.HINT] = "󰠠 ",
-      [severity.INFO] = " ",
+      [severity.INFO] = " ",
     },
   },
 })

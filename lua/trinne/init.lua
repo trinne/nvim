@@ -1,5 +1,0 @@
-require("trinne.remap")
-require("trinne.set")
-require("trinne.lazy")
-require("trinne.theme").setup()
-require("trinne.lsp")

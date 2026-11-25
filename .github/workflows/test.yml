@@ -1,0 +1,30 @@
+name: test
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "0 4 * * 1" # weekly: catch breaking plugin or tool releases
+  workflow_dispatch:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # mise / mason GitHub API rate limits
+    steps:
+      - uses: actions/checkout@v4
+      - name: Link the config
+        run: mkdir -p ~/.config && ln -s "$GITHUB_WORKSPACE" ~/.config/nvim
+      - uses: jdx/mise-action@v2
+        with:
+          mise_toml: |
+            [tools]
+            neovim = "latest"
+            tree-sitter = "latest"
+            node = "lts"
+            java = "temurin-21"
+            gradle = "latest"
+      - name: Headless checks (startup, language servers, tests, debugging)
+        run: test/run.sh
