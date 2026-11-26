@@ -29,8 +29,22 @@ local by_ft = {
   toml = { "taplo" },
 }
 for _, ft in ipairs({
-  "javascript", "javascriptreact", "typescript", "typescriptreact", "vue", "svelte", "astro",
-  "json", "jsonc", "css", "scss", "less", "html", "graphql", "markdown", "yaml",
+  "javascript",
+  "javascriptreact",
+  "typescript",
+  "typescriptreact",
+  "vue",
+  "svelte",
+  "astro",
+  "json",
+  "jsonc",
+  "css",
+  "scss",
+  "less",
+  "html",
+  "graphql",
+  "markdown",
+  "yaml",
 }) do
   by_ft[ft] = web
 end

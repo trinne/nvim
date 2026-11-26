@@ -86,13 +86,16 @@ function M.setup()
     end
   end
   each_tool(function() end, function(tool, pkg)
-    pkg:install({}, vim.schedule_wrap(function(success)
-      if success then
-        enable(tool)
-      else
-        vim.notify("mason: installing " .. tool.pkg .. " failed, see :Mason", vim.log.levels.WARN)
-      end
-    end))
+    pkg:install(
+      {},
+      vim.schedule_wrap(function(success)
+        if success then
+          enable(tool)
+        else
+          vim.notify("mason: installing " .. tool.pkg .. " failed, see :Mason", vim.log.levels.WARN)
+        end
+      end)
+    )
   end)
 end
 

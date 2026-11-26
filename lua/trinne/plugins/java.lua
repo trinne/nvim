@@ -12,15 +12,39 @@ local function glob(pattern)
   return vim.fn.glob(pattern, true, true)
 end
 
+--- OSGi bundle name of a jar file name: org.objectweb.asm_9.10.1.jar -> org.objectweb.asm
+local function bundle_name(file)
+  return (vim.fs.basename(file):gsub("_[%d.]+.*%.jar$", ""):gsub("%.jar$", ""))
+end
+
+--- java-debug and java-test bundles. Bundles that jdtls already ships (e.g. asm) are left out:
+--- loading a second copy makes jdtls drop every extension bundle.
 local function bundles()
+  local shipped = {}
+  for _, jar in ipairs(glob(mason_path("jdtls", "plugins", "*.jar"))) do
+    shipped[bundle_name(jar)] = true
+  end
   local jars = glob(mason_path("java-debug-adapter", "extension", "server", "com.microsoft.java.debug.plugin-*.jar"))
   for _, jar in ipairs(glob(mason_path("java-test", "extension", "server", "*.jar"))) do
     local name = vim.fs.basename(jar)
-    if name ~= "com.microsoft.java.test.runner-jar-with-dependencies.jar" and name ~= "jacocoagent.jar" then
+    if
+      name ~= "com.microsoft.java.test.runner-jar-with-dependencies.jar"
+      and name ~= "jacocoagent.jar"
+      and not shipped[bundle_name(jar)]
+    then
       jars[#jars + 1] = jar
     end
   end
   return jars
+end
+
+--- Install directory of a mise tool for this project (`mise where gradle`), or nil
+local function mise_where(tool)
+  if vim.fn.executable("mise") == 0 then
+    return nil
+  end
+  local out = vim.system({ "mise", "where", tool }, { text = true }):wait()
+  return out.code == 0 and vim.trim(out.stdout) or nil
 end
 
 local jdtls_min_java = 25
@@ -84,17 +108,23 @@ local function cmd(root)
     "-Dlog.level=WARNING",
     "-Xmx2g",
     "--add-modules=ALL-SYSTEM",
-    "--add-opens", "java.base/java.util=ALL-UNNAMED",
-    "--add-opens", "java.base/java.lang=ALL-UNNAMED",
-    "-jar", launcher,
-    "-configuration", vim.fs.joinpath(home, os_config),
-    "-data", vim.fs.joinpath(vim.fn.stdpath("cache"), "jdtls", project),
+    "--add-opens",
+    "java.base/java.util=ALL-UNNAMED",
+    "--add-opens",
+    "java.base/java.lang=ALL-UNNAMED",
+    "-jar",
+    launcher,
+    "-configuration",
+    vim.fs.joinpath(home, os_config),
+    "-data",
+    vim.fs.joinpath(vim.fn.stdpath("cache"), "jdtls", project),
   }
 end
 
-local root_markers = { "mvnw", "gradlew", "settings.gradle", "settings.gradle.kts", "pom.xml", "build.gradle", "build.gradle.kts", ".git" }
+local root_markers =
+  { "mvnw", "gradlew", "settings.gradle", "settings.gradle.kts", "pom.xml", "build.gradle", "build.gradle.kts", ".git" }
 
-local settings = {
+local base_settings = {
   java = {
     signatureHelp = { enabled = true },
     contentProvider = { preferred = "fernflower" }, -- decompile library classes
@@ -118,6 +148,22 @@ local settings = {
     },
   },
 }
+
+--- Build the project with its own tools: the Gradle from mise (or the project's wrapper)
+--- instead of a downloaded distribution, and the project's JDK for Gradle and compiling.
+local function settings(root)
+  local s = vim.deepcopy(base_settings)
+  local java_home = vim.env.JAVA_HOME or mise_where("java")
+  local gradle_home = not vim.uv.fs_stat(vim.fs.joinpath(root, "gradlew")) and mise_where("gradle") or nil
+  s.java.import = { gradle = { wrapper = { enabled = true }, home = gradle_home, java = { home = java_home } } }
+  if java_home then
+    local major = java_major(vim.fs.joinpath(java_home, "bin", "java"))
+    s.java.configuration = {
+      runtimes = { { name = "JavaSE-" .. major, path = java_home, default = true } },
+    }
+  end
+  return s
+end
 
 local function on_attach(_, bufnr)
   local jdtls = require("jdtls")
@@ -149,7 +195,7 @@ vim.api.nvim_create_autocmd("FileType", {
       name = "jdtls",
       cmd = command,
       root_dir = root,
-      settings = settings,
+      settings = settings(root),
       init_options = { bundles = bundles() },
       capabilities = require("blink.cmp").get_lsp_capabilities(),
       on_attach = on_attach,

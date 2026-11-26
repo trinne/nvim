@@ -6,9 +6,32 @@ local ts = require("nvim-treesitter")
 
 -- Installed up front; everything else is installed when a file of that type is first opened.
 M.installing = ts.install({
-  "bash", "css", "diff", "dockerfile", "gitcommit", "gitignore", "html", "java", "javascript",
-  "jsdoc", "json", "kotlin", "lua", "luadoc", "markdown", "markdown_inline", "python", "query",
-  "regex", "sql", "toml", "tsx", "typescript", "vim", "vimdoc", "yaml",
+  "bash",
+  "css",
+  "diff",
+  "dockerfile",
+  "gitcommit",
+  "gitignore",
+  "html",
+  "java",
+  "javascript",
+  "jsdoc",
+  "json",
+  "kotlin",
+  "lua",
+  "luadoc",
+  "markdown",
+  "markdown_inline",
+  "python",
+  "query",
+  "regex",
+  "sql",
+  "toml",
+  "tsx",
+  "typescript",
+  "vim",
+  "vimdoc",
+  "yaml",
 })
 
 vim.treesitter.language.register("bash", "zsh")
@@ -44,14 +67,22 @@ require("nvim-treesitter-textobjects").setup({
 
 local select = require("nvim-treesitter-textobjects.select")
 for keys, obj in pairs({
-  ["a="] = "assignment.outer", ["i="] = "assignment.inner",
-  ["l="] = "assignment.lhs", ["r="] = "assignment.rhs",
-  ["aa"] = "parameter.outer", ["ia"] = "parameter.inner",
-  ["ai"] = "conditional.outer", ["ii"] = "conditional.inner",
-  ["al"] = "loop.outer", ["il"] = "loop.inner",
-  ["af"] = "call.outer", ["if"] = "call.inner",
-  ["am"] = "function.outer", ["im"] = "function.inner",
-  ["ac"] = "class.outer", ["ic"] = "class.inner",
+  ["a="] = "assignment.outer",
+  ["i="] = "assignment.inner",
+  ["l="] = "assignment.lhs",
+  ["r="] = "assignment.rhs",
+  ["aa"] = "parameter.outer",
+  ["ia"] = "parameter.inner",
+  ["ai"] = "conditional.outer",
+  ["ii"] = "conditional.inner",
+  ["al"] = "loop.outer",
+  ["il"] = "loop.inner",
+  ["af"] = "call.outer",
+  ["if"] = "call.inner",
+  ["am"] = "function.outer",
+  ["im"] = "function.inner",
+  ["ac"] = "class.outer",
+  ["ic"] = "class.inner",
 }) do
   vim.keymap.set({ "x", "o" }, keys, function()
     select.select_textobject("@" .. obj, "textobjects")

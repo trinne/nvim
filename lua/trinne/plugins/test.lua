@@ -32,6 +32,18 @@ local function neotest()
       output = { open_on_run = false },
       quickfix = { open = false },
     })
+    -- neotest-java runs tests with the JUnit console launcher. Fetch it once (from Maven
+    -- Central, checksum verified) instead of asking for :NeotestJava setup.
+    local jar_dir = vim.fs.joinpath(vim.fn.stdpath("data"), "neotest-java")
+    local jars = vim.fn.glob(vim.fs.joinpath(jar_dir, "junit-platform-console-standalone-*.jar"), true, true)
+    if #jars == 0 and vim.fn.executable("java") == 1 then
+      local select = vim.ui.select
+      vim.ui.select = function(choices, _, on_choice) -- answer its "download now?" with yes
+        on_choice(choices[1])
+      end
+      pcall(java.install)
+      vim.ui.select = select
+    end
   end
   return loaded
 end

@@ -15,6 +15,8 @@ vim.wait(600000, function()
 end, 500)
 h.expect(counts ~= nil, FILE .. ": tests ran")
 h.expect(adapter == ADAPTER, FILE .. ": adapter " .. ADAPTER .. " (" .. tostring(adapter) .. ")")
-h.expect(counts.passed == PASSED and counts.failed == FAILED,
-  ("%s: %d passed, %d failed (want %d, %d)"):format(FILE, counts.passed, counts.failed, PASSED, FAILED))
+h.expect(
+  counts.passed == PASSED and counts.failed == FAILED,
+  ("%s: %d passed, %d failed (want %d, %d)"):format(FILE, counts.passed, counts.failed, PASSED, FAILED)
+)
 vim.cmd("qa!")

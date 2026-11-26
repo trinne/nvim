@@ -77,7 +77,8 @@ for _, ft in ipairs(js_filetypes) do
 end
 
 -- Kotlin ------------------------------------------------------------------------------------
-dap.adapters.kotlin = { type = "executable", command = "kotlin-debug-adapter", options = { auto_continue_if_many_stopped = false } }
+dap.adapters.kotlin =
+  { type = "executable", command = "kotlin-debug-adapter", options = { auto_continue_if_many_stopped = false } }
 dap.configurations.kotlin = {
   {
     name = "JVM: attach (port 5005)",

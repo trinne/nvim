@@ -24,7 +24,7 @@ jobs:
             neovim = "latest"
             tree-sitter = "latest"
             node = "lts"
-            java = "temurin-21"
+            java = ["temurin-21", "temurin-25"] # 21 for the fixtures, 25 runs jdtls
             gradle = "latest"
       - name: Headless checks (startup, language servers, tests, debugging)
         run: test/run.sh

@@ -13,6 +13,8 @@ for _, cmd in ipairs({ "DBUI", "DapViewToggle", "Mason", "PackUpdate" }) do
   h.expect(vim.fn.exists(":" .. cmd) == 2, "command :" .. cmd)
 end
 vim.cmd.edit(vim.fs.joinpath(vim.fn.stdpath("config"), "init.lua"))
-vim.wait(5000, function() return vim.treesitter.highlighter.active[0] ~= nil end)
+vim.wait(5000, function()
+  return vim.treesitter.highlighter.active[0] ~= nil
+end)
 h.expect(vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()] ~= nil, "treesitter highlighting (lua)")
 vim.cmd("qa!")

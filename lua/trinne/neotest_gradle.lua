@@ -14,8 +14,7 @@ local build_files = { "build.gradle.kts", "build.gradle" }
 local root_files = { "settings.gradle.kts", "settings.gradle" }
 
 adapter.root = function(dir)
-  return lib.files.match_root_pattern(unpack(root_files))(dir)
-    or lib.files.match_root_pattern(unpack(build_files))(dir)
+  return lib.files.match_root_pattern(unpack(root_files))(dir) or lib.files.match_root_pattern(unpack(build_files))(dir)
 end
 
 function adapter.filter_dir(name)

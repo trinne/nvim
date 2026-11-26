@@ -3,13 +3,17 @@
 local h = dofile(vim.fs.joinpath(vim.fn.stdpath("config"), "test/checks/helpers.lua"))
 vim.cmd.edit(FILE)
 local function names()
-  local n = vim.tbl_map(function(c) return c.name end, vim.lsp.get_clients({ bufnr = 0 }))
+  local n = vim.tbl_map(function(c)
+    return c.name
+  end, vim.lsp.get_clients({ bufnr = 0 }))
   table.sort(n)
   return n
 end
 vim.wait(60000, function()
   for _, w in ipairs(WANT) do
-    if not vim.tbl_contains(names(), w) then return false end
+    if not vim.tbl_contains(names(), w) then
+      return false
+    end
   end
   return #vim.diagnostic.get(0) >= (MIN_DIAG or 0)
 end, 500)
@@ -21,7 +25,9 @@ for _, u in ipairs(UNWANTED or {}) do
 end
 h.expect(#vim.diagnostic.get(0) >= (MIN_DIAG or 0), FILE .. ": diagnostics " .. #vim.diagnostic.get(0))
 if (FORMATTER or "lsp") == "lsp" then -- servers like jdtls register formatting after startup
-  vim.wait(60000, function() return select(2, require("conform").list_formatters_to_run(0)) end, 500)
+  vim.wait(60000, function()
+    return select(2, require("conform").list_formatters_to_run(0))
+  end, 500)
 end
 if FORMATTER then -- nil: formatted by the language server
   local fmts = require("conform").list_formatters_to_run(0)
