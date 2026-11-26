@@ -105,14 +105,10 @@ Tests run with **neotest**: `<leader>tt` runs the nearest test, `<leader>tf` the
 - **Containers:** in a devbox container, the browser runs on the host. Start Chrome there with
   `--remote-debugging-port=9222`; the attach configuration connects to
   `host.containers.internal` (Podman), and `host.docker.internal` works with Docker.
-- **Known issue, Java:**
-  - jdtls (1.63) starts and gives diagnostics, but it never finishes importing Gradle projects.
-    The file stays outside any Java project.
-  - Because of that, Java tests (neotest-java) and Java debugging don't work yet.
-  - The setup for them is in place: java-debug and java-test bundles, the JUnit launcher, and the
-    project's Gradle and JDK. The checks report this as a known issue.
-  - jdtls itself needs Java 25. It uses the project's Java when it is new enough, otherwise
-    `mise where java@temurin-25` or `$JDTLS_JAVA_HOME`.
+- **Java:** jdtls needs Java 25 to run. It uses the project's Java when that is new enough,
+  otherwise `mise where java@temurin-25` or `$JDTLS_JAVA_HOME`. The project still builds with its
+  own JDK and Gradle.
+- The JUnit launcher for neotest-java is downloaded on the first test run.
 - **Limitation, Kotlin app attach:**
   - kotlin-debug-adapter installs its breakpoints only after it has attached, and by then the JVM
     is already running again.

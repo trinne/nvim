@@ -14,7 +14,7 @@ M.tools = {
   { pkg = "shellcheck" }, -- used by bashls
   { pkg = "shfmt" },
   { pkg = "taplo", lsp = { "taplo" } },
-  { pkg = "biome", lsp = { "biome" } }, -- fallback; attaches only in projects with biome.json
+  { pkg = "biome", lsp = { "biome" }, needs = "node" }, -- fallback; attaches only with a biome.json
   -- node
   { pkg = "vtsls", lsp = { "vtsls", "tsc" }, needs = "node" }, -- tsc: TypeScript 7+ projects, see lua/trinne/typescript.lua
   { pkg = "eslint-lsp", lsp = { "eslint" }, needs = "node" }, -- attaches only with an eslint config
